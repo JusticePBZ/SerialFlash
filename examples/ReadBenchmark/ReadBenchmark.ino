@@ -1,32 +1,30 @@
 #include <SerialFlash.h>
 #include <SPI.h>
 
-const int FlashChipSelect = 6; // digital pin for flash chip CS pin
-//const int FlashChipSelect = 21; // Arduino 101 built-in SPI Flash
+#define VSPI_CS	5
+#define VSPI_HD	21
+#define VSPI_WP	22
+SPIClass vspi(VSPI);
+SerialFlashFile file;
 
 void setup() {
-  //uncomment these if using Teensy audio shield
-  //SPI.setSCK(14);  // Audio shield has SCK on pin 14
-  //SPI.setMOSI(7);  // Audio shield has MOSI on pin 7
+ 	pinMode(VSPI_HD,OUTPUT);
+	pinMode(VSPI_WP,OUTPUT);
+	digitalWrite(VSPI_HD,HIGH);
+	digitalWrite(VSPI_WP,HIGH);
 
-  //uncomment these if you have other SPI chips connected
-  //to keep them disabled while using only SerialFlash
-  //pinMode(4, INPUT_PULLUP);
-  //pinMode(10, INPUT_PULLUP);
+  Serial.begin(115200);
 
-  Serial.begin(9600);
-
-  // wait for Arduino Serial Monitor
-  while (!Serial) ;
-  delay(100);
-  Serial.println(F("All Files on SPI Flash chip:"));
-
-  if (!SerialFlash.begin(FlashChipSelect)) {
+  if (!SerialFlash.begin(vspi,VSPI_CS)) {
     while (1) {
       Serial.println(F("Unable to access SPI Flash chip"));
       delay(2500);
     }
   }
+	/*
+	if(!SerialFlash.createErasable("tset.txt", 1024*1024)){
+		Serial.println("file create error");
+	}*/
 
   SerialFlash.opendir();
   int filecount = 0;
@@ -71,6 +69,19 @@ void setup() {
   }
 }
 
-void loop() {
+void spaces(int num) {
+  for (int i=0; i < num; i++) {
+    Serial.print(' ');
+  }
 }
 
+void loop() {
+	
+}
+
+void error(const char *message) {
+  while (1) {
+    Serial.println(message);
+    delay(2500);
+  }
+}

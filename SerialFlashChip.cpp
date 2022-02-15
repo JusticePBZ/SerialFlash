@@ -30,7 +30,7 @@
 
 #define CSASSERT()  DIRECT_WRITE_LOW(cspin_basereg, cspin_bitmask)
 #define CSRELEASE() DIRECT_WRITE_HIGH(cspin_basereg, cspin_bitmask)
-#define SPICONFIG   SPISettings(50000000, MSBFIRST, SPI_MODE0)
+#define SPICONFIG   SPISettings(20000000, MSBFIRST, SPI_MODE0)
 
 uint16_t SerialFlashChip::dirindex = 0;
 uint8_t SerialFlashChip::flags = 0;
@@ -451,7 +451,7 @@ void SerialFlashChip::readSerialNumber(uint8_t *buf) //needs room for 8 bytes
 
 uint32_t SerialFlashChip::capacity(const uint8_t *id)
 {
-	uint32_t n = 1048576; // unknown chips, default to 1 MByte
+	uint32_t n = 4194304; // unknown chips, default to 1 MByte
 
 	if (id[0] == ID0_ADESTO && id[1] == 0x89) {
 		n = 1048576*16; //16MB

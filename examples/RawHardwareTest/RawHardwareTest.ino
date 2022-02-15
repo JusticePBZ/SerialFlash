@@ -21,33 +21,37 @@
 #include <SerialFlash.h>
 #include <SPI.h>
 
-const int FlashChipSelect = 6; // digital pin for flash chip CS pin
-//const int FlashChipSelect = 21; // Arduino 101 built-in SPI Flash
-
+#define VSPI_CS	5
+#define VSPI_HD	21
+#define VSPI_WP	22
+SPIClass vspi(VSPI);
 SerialFlashFile file;
 
 const unsigned long testIncrement = 4096;
 
 void setup() {
+	pinMode(VSPI_HD,OUTPUT);
+	pinMode(VSPI_WP,OUTPUT);
+	digitalWrite(VSPI_HD,HIGH);
+	digitalWrite(VSPI_WP,HIGH);
 
-  //uncomment these if using Teensy audio shield
-  //SPI.setSCK(14);  // Audio shield has SCK on pin 14
-  //SPI.setMOSI(7);  // Audio shield has MOSI on pin 7
-
-  //uncomment these if you have other SPI chips connected
-  //to keep them disabled while using only SerialFlash
-  //pinMode(4, INPUT_PULLUP);
-  //pinMode(10, INPUT_PULLUP);
-
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   while (!Serial) ;
   delay(100);
 
   Serial.println(F("Raw SerialFlash Hardware Test"));
-  SerialFlash.begin(FlashChipSelect); // proceed even if begin() fails
-
-  if (test()) {
+  SerialFlash.begin(vspi,VSPI_CS); // proceed even if begin() fails
+	
+	//Serial.printf("flash ready:%d\n",SerialFlash.ready());
+	//char write_buf[2] = {0xFF,0x54};
+	//SerialFlash.write(0x3E0000,write_buf,2);
+	//char read_buf[2] = {0x0,0x0};
+	//SerialFlash.read(0x3E0000,read_buf,2);
+	//Serial.printf("SerialFlash :%d,%d\n",read_buf[0],read_buf[1]);
+	SerialFlash.eraseAll();
+	
+  /*if (test()) {
     Serial.println();
     Serial.println(F("All Tests Passed  :-)"));
     Serial.println();
@@ -59,7 +63,8 @@ void setup() {
     Serial.println();
     Serial.println(F("The flash chip may be left in an improper state."));
     Serial.println(F("You might need to power cycle to return to normal."));
-  }
+  }*/
+	
 }
 
 

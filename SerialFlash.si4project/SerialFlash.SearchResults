@@ -1,0 +1,6 @@
+---- file Matches (8 in 0 files) ----
+RawHardwareTest.ino (examples\RawHardwareTest) line 9 : // as this test program does.  You should create files and
+RawHardwareTest.ino (examples\RawHardwareTest) line 10 : // read and write the files.  File creation allocates space
+RawHardwareTest.ino (examples\RawHardwareTest) line 12 : // reading from any other files while a file is busy writing
+RawHardwareTest.ino (examples\RawHardwareTest) line 28 : SerialFlashFile file;
+setup in RawHardwareTest.ino (examples\RawHardwareTest) :     Serial.println(F("EraseEverything before using this chip for files."));

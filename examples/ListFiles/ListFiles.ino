@@ -1,7 +1,9 @@
 #include <SerialFlash.h>
 #include <SPI.h>
 
-const int FlashChipSelect = 6; // digital pin for flash chip CS pin
+const int FlashChipSelect = 5; // digital pin for flash chip CS pin
+SPIClass vspi(VSPI);
+
 //const int FlashChipSelect = 21; // Arduino 101 built-in SPI Flash
 
 void setup() {
@@ -14,14 +16,14 @@ void setup() {
   //pinMode(4, INPUT_PULLUP);
   //pinMode(10, INPUT_PULLUP);
 
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // wait for Arduino Serial Monitor
   while (!Serial) ;
   delay(100);
   Serial.println(F("All Files on SPI Flash chip:"));
 
-  if (!SerialFlash.begin(FlashChipSelect)) {
+  if (!SerialFlash.begin(vspi,FlashChipSelect)) {
     error("Unable to access SPI Flash chip");
   }
 
